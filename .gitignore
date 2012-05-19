@@ -1,0 +1,7 @@
+*.jar
+*.bak
+*.zip
+*.class
+target
+project
+

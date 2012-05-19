@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+var recent = -1;
+
+function update(msgs){
+	var events = msgs.split("\n");
+	for(event in events){
+		var array = event.split("\t");
+		recent = array[0];
+		$("#events").prepend("<div class=\"event\">" + array[1] + "</div>");	// TODO escape
+	}
+}
+
+$(function(){
+	$("form").submit(function(){
+		var msg = $("#msg").val();
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:8088/whiteboard",
+			data: {
+				msg: msg,
+				after: recent
+			},
+			success: function(msg, type){
+				alert("success: " + msg + " (" + type + ")");
+				update(msg);
+			},
+			failure: function(msg, type){
+				alert("failure: " + msg + " (" + type + ")");
+			}
+		});
+		return false;
+	});
+});
+</script>
+</head>
+<body>
+<h1>Whiteboard</h1>
+<form id="form">
+<input type="text" size="80" name="msg" id="msg"/>
+<input type="submit" value="押せ" id="post"/>
+<hr/>
+<div id="events">
+</div>
+</form>
+</body>
+</html>
